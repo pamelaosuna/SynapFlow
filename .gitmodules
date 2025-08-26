@@ -1,0 +1,3 @@
+[submodule "Spine-Detection-with-CNNs"]
+	path = Spine-Detection-with-CNNs
+	url = https://github.com/pamelaosuna/Spine-Detection-with-CNNs
