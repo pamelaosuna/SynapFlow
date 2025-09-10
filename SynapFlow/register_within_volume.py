@@ -1,6 +1,7 @@
 import os
 import glob
 import argparse
+from tqdm import tqdm
 
 from skimage.transform import resize
 from skimage import io
@@ -23,7 +24,7 @@ def register(
         fixed,
         moving,
         parameter_object=param_object,
-        log_to_console=True
+        log_to_console=False
         )
 
     moved = itk.GetArrayFromImage(moved)
@@ -51,11 +52,11 @@ def downsample_and_register_itk(
     tmp_w, tmp_h = orig_w //downsample_factor, orig_h //downsample_factor
 
     all_transf = []
-    prev_ds = resize(
-        images[0], (tmp_h, tmp_w), anti_aliasing=True, preserve_range=True
-        )
-
-    for i in range(1, len(images)):
+    
+    for i in tqdm(range(1, len(images)), desc='Registering images'):
+        prev_ds = resize(
+            images[i-1], (tmp_h, tmp_w), anti_aliasing=True, preserve_range=True
+            )
         curr_ds = resize(
             images[i], (tmp_h, tmp_w), anti_aliasing=True, preserve_range=True
             )
@@ -73,8 +74,8 @@ def downsample_and_register_itk(
         transf.SetParameter(0, 'Spacing', [str(1), str(1)])
 
         curr_itk = itk.GetImageFromArray(images[i].astype(np.float32))
-        prev_ds = apply_transformation(curr_itk, transf) # update reference image
-        images[i] = prev_ds
+        out_reg = apply_transformation(curr_itk, transf) # update reference image
+        images[i] = out_reg
 
         all_transf.append(transf)
     
@@ -138,3 +139,5 @@ if __name__ == '__main__':
         args.save_transf,
         args.mip_type
         )
+    
+# TODO: enable MIP computation only option (if no registration needed)
