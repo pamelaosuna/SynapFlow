@@ -91,6 +91,7 @@ def run_registration(
     images = np.array([io.imread(fp) for fp in img_filepaths])
 
     images, all_transf = downsample_and_register_itk(images, downsample_factor)
+
     # save transformations using filenames of images. only if save_transf
     if save_transf:
         os.makedirs(os.path.join(out_dir, 'transf'), exist_ok=True)
@@ -99,6 +100,10 @@ def run_registration(
                 out_dir, 'transf', os.path.basename(img_filepaths[i+1]) + '.txt'
                 )
             tr.WriteParameterFile(tr.GetParameterMap(0), transf_fp)
+
+    # Save registered images
+    for i, img in enumerate(images):
+        io.imsave(os.path.join(out_dir, os.path.basename(img_filepaths[i])), img)
 
     # Compute 2D projection of the volume and save
     mip_operator = np.max if mip_type == 'max' else np.mean
@@ -141,3 +146,4 @@ if __name__ == '__main__':
         )
     
 # TODO: enable MIP computation only option (if no registration needed)
+# TODO: add code to enable using the transformations to register other channels

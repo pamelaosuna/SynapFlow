@@ -208,4 +208,13 @@ __marimo__/
 
 # VSCode settings
 .vscode/
+
+# Temporary files
 _tmp/
+
+# Model weights
+SynapFlow/depth_tracking/checkpoints/
+
+# Other
+.DS_Store
+
