@@ -108,7 +108,7 @@ def run_registration(
     # Compute 2D projection of the volume and save
     mip_operator = np.max if mip_type == 'max' else np.mean
     mip_img = mip_operator(images, axis=0).astype(np.uint8)
-    io.imsave(os.path.join(out_dir, 'mips', os.path.basename(input).split('*')[0] + '.png'), mip_img)
+    io.imsave(os.path.join(out_dir, 'mips', os.path.basename(input).split('_layer')[0] + '.png'), mip_img)
 
 def run_registration_args(args):
     run_registration(
