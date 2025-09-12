@@ -11,8 +11,8 @@ import pump.test_singlescale as pump_main
 from pump.post_filter import densify_corres
 
 def compute_dense_corres(
-        img1_path: str, 
-        img2_path: str, 
+        source: str, 
+        target: str, 
         output_path: str, 
         resize: int,
         device: str, 
@@ -22,8 +22,8 @@ def compute_dense_corres(
     Given a pair of images, compute dense correspondences.
     """
     args = argparse.Namespace(
-        img1=img1_path, # fixed image
-        img2=img2_path, # moving image
+        img1=source, # source image
+        img2=target, # target image
         output=output_path,
         resize=resize,
         device=device,
@@ -55,19 +55,19 @@ def compute_dense_corres(
     return corres, dense_corres
 
 def run_compute_dense_corres(
-        fixed_image: str,
-        moving_image: str,
+        src_image: str,
+        tgt_image: str,
         out_dir: str, 
         resize: int, 
         device: str
         ) -> None:
-    height, width = Image.open(fixed_image).size[:2]
-    out_fn = 'fixed=' + fixed_image.split('/')[-1][:-4] + '_moving=' + moving_image.split('/')[-1][:-4]
+    height, width = Image.open(src_image).size[:2]
+    out_fn = 'source=' + src_image.split('/')[-1][:-4] + '_target=' + tgt_image.split('/')[-1][:-4]
     out_fp = os.path.join(out_dir, out_fn + '_sparse.npy')
 
     compute_dense_corres(
-        fixed_image,
-        moving_image,
+        src_image,
+        tgt_image,
         out_fp,
         resize,
         device=device,
@@ -79,8 +79,8 @@ def run_compute_dense_corres_args(args):
     print(f'Using device: {device}')
 
     run_compute_dense_corres(
-        args.fixed,
-        args.moving,
+        args.target,
+        args.source,
         args.out_dir,
         args.resize,
         device
@@ -90,10 +90,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Compute dense correspondences between two images'
         )
-    parser.add_argument('-fi', '--fixed', type=str,
-                        help='file path to fixed image')
-    parser.add_argument('-mo', '--moving', type=str,
-                        help='file path to moving image')
+    parser.add_argument('-s', '--source', type=str,
+                        help='file path to src image')
+    parser.add_argument('-t', '--target', type=str,
+                        help='file path to target image')
     parser.add_argument('-o', '--out_dir', type=str,
                         help='directory to save output')
     parser.add_argument('-r', '--resize', type=int, default=0,

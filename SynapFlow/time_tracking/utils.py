@@ -93,8 +93,8 @@ def corres_box(box: np.ndarray, corres: np.ndarray, shape: "tuple[int, int]") ->
 def correspondences_in_xy(
         df_t1: pd.DataFrame,
         df_t2: pd.DataFrame,
-        corres_t1_fixed: np.ndarray,
-        corres_t2_fixed: np.ndarray,
+        corres_t1_to_t2: np.ndarray,
+        corres_t2_to_t1: np.ndarray,
         img_shape: "tuple[int, int]"
     ):
     """
@@ -119,7 +119,7 @@ def correspondences_in_xy(
         expected_boxes_id1 = np.asarray([
             corres_box(
                 box,
-                corres_t1_fixed,
+                corres_t1_to_t2,
                 img_shape)
                 if box[0] >= 0 else [-1]*4
             for box in boxes_id1
@@ -151,7 +151,7 @@ def correspondences_in_xy(
         expected_boxes_id2 = np.asarray([
             corres_box(
                 box,
-                corres_t2_fixed,
+                corres_t2_to_t1,
                 img_shape)
                 if box[0] >= 0 else [-1]*4
             for box in boxes_id2

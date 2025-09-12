@@ -48,17 +48,17 @@ class SpinesVolumeMatcher:
         self.img_height = None
 
     def load_corres(self):
-        corres_t1_fixed_fp = os.path.join(
-            self.corres_dir, f"fixed={os.path.basename(self.mip_t1).replace('.png', '')}_moving={os.path.basename(self.mip_t2).replace('.png', '')}_dense.npy"
+        corres_t1_to_t2_fp = os.path.join(
+            self.corres_dir, f"source={os.path.basename(self.mip_t1).replace('.png', '')}_target={os.path.basename(self.mip_t2).replace('.png', '')}_dense.npy"
             )
-        corres_t2_fixed_fp = os.path.join(
-            self.corres_dir, f"fixed={os.path.basename(self.mip_t2).replace('.png', '')}_moving={os.path.basename(self.mip_t1).replace('.png', '')}_dense.npy"
+        corres_t2_to_t1_fp = os.path.join(
+            self.corres_dir, f"source={os.path.basename(self.mip_t2).replace('.png', '')}_target={os.path.basename(self.mip_t1).replace('.png', '')}_dense.npy"
             )
         
-        corres_t1_fixed = np.load(corres_t1_fixed_fp, allow_pickle=True)['corres']
-        corres_t2_fixed = np.load(corres_t2_fixed_fp, allow_pickle=True)['corres']
+        corres_t1_to_t2 = np.load(corres_t1_to_t2_fp, allow_pickle=True)['corres']
+        corres_t2_to_t1 = np.load(corres_t2_to_t1_fp, allow_pickle=True)['corres']
 
-        return corres_t1_fixed, corres_t2_fixed
+        return corres_t1_to_t2, corres_t2_to_t1
 
     def load_dfs(self):
         df_t1 = pd.read_csv(self.fp_t1)
@@ -72,7 +72,7 @@ class SpinesVolumeMatcher:
     def time_track(self):
         df_t1, df_t2 = self.load_dfs()
 
-        corres_t1_fixed, corres_t2_fixed = self.load_corres()
+        corres_t1_to_t2, corres_t2_to_t1 = self.load_corres()
 
         self.vol_name_t1 = os.path.basename(self.fp_t1).replace('.csv', '')
         self.vol_name_t2 = os.path.basename(self.fp_t2).replace('.csv', '')
@@ -84,14 +84,14 @@ class SpinesVolumeMatcher:
         nlayers_t1 = len(self.img_files_t1)
         nlayers_t2 = len(self.img_files_t2)
 
-        fixed_vol = np.array([io.imread(f) for f in self.img_files_t1])
-        moving_vol = np.array([io.imread(f) for f in self.img_files_t2])
+        src_vol = np.array([io.imread(f) for f in self.img_files_t1])
+        tgt_vol = np.array([io.imread(f) for f in self.img_files_t2])
 
-        self.best_shift_z = -6 # comp_best_shift_z(fixed_vol, moving_vol) # -8 or -6 for test case
+        self.best_shift_z = comp_best_shift_z(src_vol, tgt_vol)
 
         # Clear fixed_vol and moving_vol once they have been used
-        del fixed_vol
-        del moving_vol
+        del src_vol
+        del tgt_vol
 
         self.img_width = df_t1.iloc[0]['width']
         self.img_height = df_t1.iloc[0]['height']
@@ -99,8 +99,8 @@ class SpinesVolumeMatcher:
         medboxes_t1, medboxes_t2, oob_xy_t1_fixed, oob_xy_t2_fixed = correspondences_in_xy(
             df_t1,
             df_t2,
-            corres_t1_fixed,
-            corres_t2_fixed,
+            corres_t1_to_t2,
+            corres_t2_to_t1,
             (self.img_height, self.img_width)
         )
 
