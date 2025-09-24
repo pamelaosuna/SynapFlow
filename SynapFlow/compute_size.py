@@ -328,7 +328,8 @@ if __name__ == "__main__":
         help="Output directory for the 2D computed sizes")
     parser.add_argument("--input_dir", type=str, required=True,
         help="Directory containing the time-tracked predictions")
-    parser.add_argument("--operator_3d", type=str, required=True, choices=['mean', 'median', 'max', 'median_of_inliers'],
+    parser.add_argument("--operator_3d", type=str, default='median', 
+        choices=['mean', 'median', 'max', 'median_of_inliers'],
         help="Operator to use for the 3D computation")
     parser.add_argument("--sigma", type=float, default=0.3,
         help="Sigma for the Gaussian weighting. Default: 0.3. If 1, no weighting is applied.")
