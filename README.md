@@ -1,6 +1,6 @@
 # SynapFlow: A Modular Framework Towards Large-Scale Analysis of Dendritic Spines 🧠
 
-SynapFlow is a modular pipeline designed for the analysis of dendritic spines in time-lapse microscopy images. It is composed of the following components: spine detection, depth-tracking, time-tracking, spine size computation, and spine-head-to-dendrite estimation. For more details, please refer to our preprint [here](XX).
+SynapFlow is a modular pipeline designed for the analysis of dendritic spines in time-lapse microscopy images. It is composed of the following components: spine detection, depth-tracking, time-tracking, spine size computation, and spine-head-to-dendrite estimation. For more details, please refer to our preprint [here](https://arxiv.org/abs/2509.18926).
 
 ### Installation
 Create conda environment:
@@ -67,5 +67,7 @@ PYTHONPATH=. python SynapFlow/estimate_head2dend.py --input_dir "output/depth_tr
 ```
 
 ## Dataset
-
 Coming soon! ⏳
+
+## Graphical User Interface (GUI)
+A GUI for a more user-friendly experience of SynapFlow is under development. Stay tuned! 🚧
