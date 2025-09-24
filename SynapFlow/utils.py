@@ -20,7 +20,7 @@ def generate_coco_from_spine(data_root, split, out_dir, csv_fp=None):
     if csv_fp is not None:
         annotation_file = os.path.join(out_dir, os.path.basename(csv_fp).replace('.csv', '.json'))
     else:
-        annotation_file = os.path.join(out_dir, f'{split}.json')
+        annotation_file = os.path.join(out_dir, 'image_info.json')
     os.makedirs(out_dir, exist_ok=True)
     # annotation_file = os.path.join(data_root, f'annotations/{split}.json')
     # os.makedirs(os.path.join(data_root, 'annotations'), exist_ok=True)
@@ -101,7 +101,7 @@ def generate_coco_from_spine(data_root, split, out_dir, csv_fp=None):
     frame_range = {'start': 0.0, 'end': 1.0}
     annotations['frame_range'] = frame_range
 
-    with open(annotation_file, 'w') as anno_file:
-        json.dump(annotations, anno_file, indent=4)
+    # with open(annotation_file, 'w') as anno_file:
+    #     json.dump(annotations, anno_file, indent=4)
     
     return annotations

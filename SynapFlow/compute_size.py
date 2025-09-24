@@ -220,7 +220,7 @@ def comp_2D_sizes(preds_filepath: str, img_dir: str, params: dict) -> pd.DataFra
     
     return df
 
-def median_of_inliers(vals_2d: np.array, n_std: int = 1) -> float:
+def median_of_inliers(vals_2d: np.ndarray, n_std: int = 1) -> float:
     """
     Computes the median of the inliers of spine sizes.
     Inliers are defined as the values within N standard deviations from the mean.
@@ -257,7 +257,15 @@ def comp_3D_sizes(sizes2d_filepath: str, operator_3d: str) -> pd.DataFrame:
     return df
 
 def run_size_computation(
-        input_dir, img_dir, out_dir, operator_3d, margin_bg, margin_dend, perc_bg, perc_dend, sigma
+        input_dir: str,
+        img_dir: str,
+        out_dir: str,
+        operator_3d: str,
+        margin_bg: int,
+        margin_dend: int,
+        perc_bg: float,
+        perc_dend: float,
+        sigma: float
         ):
     # Computation in 2D
     preds_files = sorted(glob(os.path.join(input_dir, "*.csv")))
@@ -301,7 +309,7 @@ def run_size_computation_args(args):
     run_size_computation(
         args.input_dir,
         args.img_dir,
-        args.out_dir_2d,
+        args.out_dir,
         args.operator_3d,
         args.margin_bg,
         args.margin_dend,
@@ -316,7 +324,7 @@ if __name__ == "__main__":
         )
     parser.add_argument("--img_dir", type=str, required=True, 
         help="Directory containing the images (previously registered within volume)")
-    parser.add_argument("--out_dir_2d", type=str, required=True,
+    parser.add_argument("--out_dir", type=str, required=True,
         help="Output directory for the 2D computed sizes")
     parser.add_argument("--input_dir", type=str, required=True,
         help="Directory containing the time-tracked predictions")

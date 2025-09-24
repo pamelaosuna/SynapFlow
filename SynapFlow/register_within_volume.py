@@ -1,6 +1,7 @@
 import os
 import glob
 import argparse
+from typing import Union, Any
 from tqdm import tqdm
 
 from skimage.transform import resize
@@ -10,7 +11,7 @@ import itk
 
 def register(
         fixed: itk.Image, moving: itk.Image, reg_type: str
-        ) -> "tuple[np.ndarray, itk.TransformixFilter]":
+        ) -> "tuple[np.ndarray, itk.ParameterObject]":
     ndim = fixed.GetImageDimension()
 
     param_object = itk.ParameterObject.New()
@@ -35,7 +36,7 @@ def register(
     return moved, transf_params
 
 def apply_transformation(
-        img: itk.Image, transf_params: itk.TransformixFilter) -> np.ndarray:
+        img: itk.Image, transf_params: "itk.ParameterObject") -> np.ndarray: # transf_params: itk.TransformixFilter
     moved = itk.transformix_filter(
         img, transf_params)
     moved = itk.GetArrayFromImage(moved)
@@ -83,7 +84,7 @@ def downsample_and_register_itk(
 
 def run_registration(
         input: str, out_dir: str, downsample_factor: float, save_transf: bool, mip_type: str
-        ) -> None:
+        ):
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs(os.path.join(out_dir, 'mips'), exist_ok=True)
 

@@ -48,9 +48,7 @@ def track_in_depth(
         config: dict = None,
         device: torch.device = torch.device('cpu'),
         draw: bool = False,
-        ) -> None:
-
-
+        ):
     if lambdas['appearance'] > 0.0:
         patch_size = config['dataset']['patch_size']
     
@@ -81,8 +79,8 @@ def track_in_depth(
             prev_im = images_in_stack[i_im-1]
             im = images_in_stack[i_im]
 
-            df_img = df[df['filename'] == im['file_name']]
-            df_prev_img = df[df['filename'] == prev_im['file_name']]
+            df_img = df[df['filename'] == im['file_name']].copy()
+            df_prev_img = df[df['filename'] == prev_im['file_name']].copy()
 
             if len(df_prev_img) == 0 or len(df_img) == 0:
                 continue
@@ -199,7 +197,9 @@ def run_track_in_depth(
         os.makedirs(os.path.join(out_dir, 'images'), exist_ok=True)
 
     # load the detections
-    df_all = pd.concat([pd.read_csv(f) for f in glob(f"{input_dir}/*.csv")])
+    df_list = [pd.read_csv(f) for f in sorted(glob(f"{input_dir}/*.csv"))]
+    df_list = [tmp_df for tmp_df in df_list if len(tmp_df) > 0]
+    df_all = pd.concat(df_list)
 
     # filter out low-score detecions
     df_all = df_all[df_all['score'] >= det_thresh]

@@ -191,7 +191,10 @@ def overlay_spine_and_dendrite(
     return mask_spine.astype(np.uint8), mask_dendrite.astype(np.uint8)
 
 def binarize_spine_subreg(
-        img: np.ndarray, img_spine: np.ndarray, bbox_ext: np.ndarray, thresh: float
+        img: np.ndarray,
+        img_spine: np.ndarray,
+        bbox_ext: np.ndarray,
+        thresh: float
         ):
     binary = img_spine > thresh
     binary_ext = img[
@@ -218,7 +221,8 @@ def find_largest_contour(
     
     return largest_contour
     
-def estimate_head2dend(dets_file: str, img_dir: str, max_classes_otsu: int = 5) -> pd.DataFrame:
+def estimate_head2dend(
+        dets_file: str, img_dir: str, max_classes_otsu: int = 5) -> pd.DataFrame:
     df = pd.read_csv(dets_file)
     feat_labels = ['spine_to_dendrite_distance']
 
@@ -278,7 +282,7 @@ def estimate_head2dend(dets_file: str, img_dir: str, max_classes_otsu: int = 5) 
         
     return df
 
-def integrate_2d_to_3d(filepath, operator_3d='median'):
+def integrate_2d_to_3d(filepath: str, operator_3d: str = 'median'):
     operator_dispatcher = {
         'mean': np.mean,
         'median': np.median,
