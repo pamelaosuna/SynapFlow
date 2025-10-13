@@ -11,9 +11,6 @@ pip install yacs mmdet==2.25.0
 pip install mmcv-full==1.4.0
 ```
 
-Currently, the packages needed for spine detection are not integrated and need to be installed as a separate environment following [Spine-Detection-with-CNNs](https://github.com/pamelaosuna/Spine-Detection-with-CNNs/tree/6661e1622ff1166bc2e8ec7da91c620d9ad6a249?tab=readme-ov-file#installation).
-
-
 ## Getting started
 - Filenames should finish with '_layerXXX.png' and zero-filled (e.g. '_layer01.png', '_layer02.png', etc).
 - Images must be 8-bit already.
