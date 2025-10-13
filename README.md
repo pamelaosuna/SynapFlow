@@ -7,9 +7,11 @@ Create conda environment:
 ```bash
 conda env create -f environment-cpu.yml
 conda activate synapflow
+pip install yacs mmdet==2.25.0
+pip install mmcv-full==1.4.0
 ```
 
-Currently, the packages needed for spine detection are not integrated and need to be installed as a separate environment following [Spine-Detection-with-CNNs](Spine-Detection-with-CNNs/README.md).
+Currently, the packages needed for spine detection are not integrated and need to be installed as a separate environment following [Spine-Detection-with-CNNs](https://github.com/pamelaosuna/Spine-Detection-with-CNNs/tree/6661e1622ff1166bc2e8ec7da91c620d9ad6a249?tab=readme-ov-file#installation).
 
 
 ## Getting started
@@ -26,10 +28,13 @@ python SynapFlow/register_within_volume.py --input "data/img/aidv001_tp1_stack0_
 ```
 
 #### Spine detection
+Download the pre-trained weights from:
+https://zenodo.org/records/17312393 and save the file in folder `Spine-Detection-with-CNNs/tutorial_exp/DefDETR/default`.
+
 Predict bounding boxes for spines in each image. From the `Spine-Detection-with-CNNs` directory, run:
 ```bash
 cd Spine-Detection-with-CNNs
-PYTHONPATH=src/ python src/spine_detection/predict_mmdet.py --input "data/img_registered/*.png" --model DefDETR --model_type Def_DETR --param_config lr_0.001_warmup_None_momentum_0.6_L2_3e-06_aug_SGD_S1A2_run1 --model_epoch epoch_54 --theta 0.5 --delta 0.5 --output output/dets --save_images --device cpu
+PYTHONPATH=src/ python src/spine_detection/predict_mmdet.py --input "data/img_registered/*.png" --model DefDETR --model_type Def_DETR --param_config default --model_epoch epoch_54 --theta 0.5 --delta 0.5 --output output/dets --save_images --device cpu
 ``` 
 
 #### Depth-tracking
@@ -67,6 +72,12 @@ PYTHONPATH=. python SynapFlow/estimate_head2dend.py --input_dir "output/depth_tr
 ```
 
 ## Dataset
+
+#### S3D dataset
+Contains 3D volumes of dendritic spines imaged from mouse auditory cortex with two-photon microscopy. Annotations contain bounding boxes for spine locations and spine IDs across layers (not time-tracked).
+Download from https://zenodo.org/records/17335417
+
+#### S2D+T
 Coming soon! ⏳
 
 ## Graphical User Interface (GUI)
